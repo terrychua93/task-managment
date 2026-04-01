@@ -1,0 +1,34 @@
+@using TaskApp.Web.Models
+@namespace TaskApp.Web.Shared.Components
+
+<div class="w-full bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between h-full">
+
+    <div>
+        <div class="font-semibold text-lg text-gray-800">@Task.Title</div>
+        <div class="text-sm text-gray-500">@Task.Description</div>
+
+        <span class="inline-block mt-3 px-2 py-1 text-xs rounded-full
+            @(Task.IsCompleted ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700")">
+            @(Task.IsCompleted ? "Completed" : "Pending")
+        </span>
+    </div>
+
+    <div class="flex gap-2 mt-4">
+        <button class="flex-1 px-3 py-1 text-sm bg-green-500 hover:bg-green-600 text-white rounded-lg"
+                @onclick="() => OnComplete.InvokeAsync(Task.Id)">
+            Complete
+        </button>
+
+        <button class="flex-1 px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg"
+                @onclick="() => OnDelete.InvokeAsync(Task.Id)">
+            Delete
+        </button>
+    </div>
+
+</div>
+
+@code {
+    [Parameter] public TaskItem Task { get; set; } = default!;
+    [Parameter] public EventCallback<Guid> OnComplete { get; set; }
+    [Parameter] public EventCallback<Guid> OnDelete { get; set; }
+}

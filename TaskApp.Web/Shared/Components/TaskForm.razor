@@ -1,0 +1,48 @@
+@using TaskApp.Web.Models
+@namespace TaskApp.Web.Shared.Components
+
+<div class="bg-white shadow-md rounded-2xl p-5 mb-6 border">
+
+    <h3 class="text-lg font-semibold mb-4">Add New Task</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <input class="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+               @bind="Title"
+               placeholder="Task title" />
+
+        <input class="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+               @bind="Description"
+               placeholder="Description" />
+
+        <button class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition"
+                @onclick="HandleSubmit">
+            Add Task
+        </button>
+
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback<TaskItem> OnSubmit { get; set; }
+
+    private string Title { get; set; } = "";
+    private string? Description { get; set; }
+
+    private async Task HandleSubmit()
+    {
+        if (string.IsNullOrWhiteSpace(Title)) return;
+
+        var task = new TaskItem
+        {
+            Title = Title,
+            Description = Description,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await OnSubmit.InvokeAsync(task);
+
+        Title = "";
+        Description = "";
+    }
+}
