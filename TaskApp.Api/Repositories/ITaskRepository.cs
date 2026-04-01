@@ -1,0 +1,12 @@
+using TaskApp.Api.Models;
+
+namespace TaskApp.Api.Repositories;
+
+public interface ITaskRepository
+{
+    Task<List<TaskItem>> GetAllAsync();
+    Task<TaskItem?> GetByIdAsync(Guid id);
+    Task AddAsync(TaskItem task);
+    Task UpdateAsync(TaskItem task);
+    Task DeleteAsync(Guid id);
+}
