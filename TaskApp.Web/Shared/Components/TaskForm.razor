@@ -12,21 +12,25 @@
 
             <div>
                 <InputText class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-                           @bind-Value="taskModel.Title"
-                           placeholder="Task title" />
+                        @bind-Value="taskModel.Title"
+                        placeholder="Task title" />
 
-                <ValidationMessage For="@(() => taskModel.Title)" class="validation-message text-sm p-1"/>
+                <div class="min-h-[20px]">
+                    <ValidationMessage For="@(() => taskModel.Title)" class="validation-message text-sm" />
+                </div>
             </div>
 
             <div>
                 <InputText class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-                           @bind-Value="taskModel.Description"
-                           placeholder="Description" />
+                        @bind-Value="taskModel.Description"
+                        placeholder="Description" />
 
-                <ValidationMessage For="@(() => taskModel.Description)" class="validation-message text-sm p-1" />
+                <div class="min-h-[20px]">
+                    <ValidationMessage For="@(() => taskModel.Description)" class="validation-message text-sm" />
+                </div>
             </div>
 
-            <div class="flex items-end">
+            <div class="flex flex-col justify-end">
                 <button type="submit"
                         class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition w-full">
                     Add Task
