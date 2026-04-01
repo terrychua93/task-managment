@@ -1,0 +1,102 @@
+﻿@using TaskApp.Web.Models
+@using TaskApp.Web.Shared.Components
+
+@inject TaskApiService TaskService
+
+@page "/"
+
+<div class="min-h-screen bg-gray-100 py-10">
+
+    <!-- Header -->
+    <div class="max-w-6xl mx-auto p-6">
+        <h1 class="text-3xl font-bold text-gray-800">Task Manager</h1>
+        <p class="text-gray-500">Manage your tasks efficiently</p>
+    </div>
+
+    <!-- Content Card -->
+    <div class="max-w-6xl mx-auto rounded-2xl p-6">
+
+        <!-- Form -->
+        <div class="mb-6">
+            <TaskForm OnSubmit="AddTask" />
+        </div>
+
+        <!-- Filter -->
+        <div class="mb-6">
+            <TaskFilter @bind-Value="filter" />
+        </div>
+
+        <!-- Loading -->
+        @if (isLoading)
+        {
+            <p class="text-center text-gray-500">Loading...</p>
+        }
+        else if (!FilteredTasks.Any())
+        {
+            <p class="text-center text-gray-500">No tasks found.</p>
+        }
+        else
+        {
+            <!-- Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach (var task in FilteredTasks)
+                {
+                    <TaskCard Task="task"
+                              OnComplete="@(async () => await CompleteTask(task))"
+                              OnDelete="@(async () => await DeleteTask(task))" />
+                }
+            </div>
+        }
+
+    </div>
+</div>
+
+@code {
+    private List<TaskItem> tasks = new();
+    private string filter = "All";
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTasks();
+    }
+
+    private async Task LoadTasks()
+    {
+        isLoading = true;
+        tasks = await TaskService.GetTasks();
+        isLoading = false;
+    }
+
+    private IEnumerable<TaskItem> FilteredTasks
+    {
+        get
+        {
+            return filter switch
+            {
+                "Completed" => tasks.Where(t => t.IsCompleted),
+                "Pending" => tasks.Where(t => !t.IsCompleted),
+                _ => tasks
+            };
+        }
+    }
+
+    private async Task AddTask(TaskItem task)
+    {
+        await TaskService.AddTask(task);
+        await LoadTasks();
+    }
+
+    private async Task CompleteTask(TaskItem task)
+    {
+        task.IsCompleted = true;
+        await TaskService.UpdateTask(task);
+        await LoadTasks();
+    }
+
+    private async Task DeleteTask(TaskItem task)
+    {
+        await TaskService.DeleteTask(task.Id);
+        await LoadTasks();
+    }
+}
