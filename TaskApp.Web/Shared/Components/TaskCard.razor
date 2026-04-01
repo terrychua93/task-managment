@@ -14,10 +14,13 @@
     </div>
 
     <div class="flex gap-2 mt-4">
-        <button class="flex-1 px-3 py-1 text-sm bg-green-500 hover:bg-green-600 text-white rounded-lg"
-                @onclick="() => OnComplete.InvokeAsync(Task.Id)">
-            Complete
-        </button>
+        @if(!Task.IsCompleted)
+        {
+            <button class="flex-1 px-3 py-1 text-sm bg-green-500 hover:bg-green-600 text-white rounded-lg"
+                    @onclick="() => OnComplete.InvokeAsync(Task.Id)">
+                Complete
+            </button>
+        }
 
         <button class="flex-1 px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg"
                 @onclick="() => OnDelete.InvokeAsync(Task.Id)">
