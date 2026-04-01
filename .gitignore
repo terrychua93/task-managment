@@ -1,0 +1,15 @@
+# .NET
+bin/
+obj/
+
+# VS / Rider
+.vs/
+*.user
+
+# Node (your Tailwind setup)
+node_modules/
+package-lock.json
+
+# Build output
+dist/
+wwwroot/_framework/
